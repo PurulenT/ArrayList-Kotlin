@@ -23,9 +23,10 @@ class NumbersArrayList : NumbersMutableList {
     fun growIfNeeded() {
         if(numbers.size == size){
             val newArray = arrayOfNulls<Int>(numbers.size * 2)
-            for(index in numbers.indices){
-                newArray[index] = numbers[index]
-            }
+            System.arraycopy(numbers, 0, newArray, 0, size)
+//            for(index in numbers.indices){ цикл на языке kotlin/java гораздо медленнее метода arraycopy (низкоуровневый С,С++)
+//                newArray[index] = numbers[index]
+//            }
             numbers = newArray
         }
     }
@@ -40,26 +41,32 @@ class NumbersArrayList : NumbersMutableList {
 //    }
 
     override fun add(index: Int, number: Int) {
+        checkIndexForAdding(index)
         growIfNeeded()
-        for(i in size downTo index + 1){
-            numbers[i] = numbers[i - 1] //исправлена ошибка: индекс не size а i
-        }
+        System.arraycopy(numbers, index, numbers, index + 1, size - index)
+//        for(i in size downTo index + 1){ copyarray делает то же самое но быстрее так как написан на низкоуровневом языке С,С++
+//            numbers[i] = numbers[i - 1] //исправлена ошибка: индекс не size а i
+//        }
         numbers[index] = number
         size++
     }
 
     override fun get(index: Int): Int {
+        checkIndex(index)
         return numbers[index]!!
     }
 
     override fun set(index: Int, value: Int) {
+        checkIndex(index)
         numbers[index] = value
     }
 
     override fun removeAt(index: Int) {
-        for(i in index until size - 1){
-            numbers[i] = numbers[i + 1]
-        }
+        checkIndex(index)
+        System.arraycopy(numbers, index + 1, numbers, index, size - index - 1) // берем все элементы справа от индекса удаляемого и ставим их на место удаляемого
+//        for(i in index until size - 1){
+//            numbers[i] = numbers[i + 1]
+//        }
         size--
         numbers[size] = null
     }
@@ -82,6 +89,18 @@ class NumbersArrayList : NumbersMutableList {
             if(numbers[i] == number) return true
         }
         return false
+    }
+
+    private fun checkIndex(index: Int){
+        if (index < 0 || index >= size) {
+            throw IndexOutOfBoundsException("Index: $index, size: $size")
+        }
+    }
+
+    private fun checkIndexForAdding(index: Int){
+        if (index < 0 || index > size) {
+            throw IndexOutOfBoundsException("Index: $index, size: $size")
+        }
     }
 
     companion object{
