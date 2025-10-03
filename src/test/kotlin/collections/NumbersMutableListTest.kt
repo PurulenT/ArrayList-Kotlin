@@ -27,7 +27,7 @@ class NumbersMutableListTest {
     @MethodSource("mutableListSource")
     fun `When added at last then it is last`(list: NumbersMutableList){
         repeat(100) {
-            list.add(it)
+            list + it //используется переопределенный оператор +
         }
         list.add(99, 1000)
         assertEquals(1000, list.get(99))
@@ -66,7 +66,8 @@ class NumbersMutableListTest {
         repeat(100){
             list.add(it)
         }
-        assertEquals(50, list.get(50))
+        //list[50] = 1001 //переопределенный оператор set позволяет устанавливать значения через []
+        assertEquals(50, list[50])
     }
 
     @ParameterizedTest
@@ -86,7 +87,7 @@ class NumbersMutableListTest {
             list.add(it)
         }
         list.removeAt(50)
-        assertEquals(51, list.get(50))
+        assertEquals(51, list[50])
     }
 
     @ParameterizedTest
@@ -95,8 +96,9 @@ class NumbersMutableListTest {
         repeat(100){
             list.add(it)
         }
-        list.remove(50)
-        assertEquals(51, list.get(50))
+//        list.remove(50)
+        list - 50 //переопределенный оператор минус
+        assertEquals(51, list[50])
     }
 
 //    @ParameterizedTest не работает -> в реализации мы пообещали что get возвращает !!

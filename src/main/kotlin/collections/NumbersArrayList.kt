@@ -1,7 +1,7 @@
 package collections
 
 class NumbersArrayList : NumbersMutableList {
-    private var numbers = arrayOfNulls<Int>(10)
+    private var numbers = arrayOfNulls<Int>(INITIAL_CAPACITY)
 
     override var size: Int = 0
         private set
@@ -10,6 +10,14 @@ class NumbersArrayList : NumbersMutableList {
         growIfNeeded()
         numbers[size] = number
         size++
+    }
+
+    override fun plus(number: Int) {
+        add(number)
+    }
+
+    override fun minus(number: Int) {
+        remove(number)
     }
 
     fun growIfNeeded() {
@@ -44,6 +52,10 @@ class NumbersArrayList : NumbersMutableList {
         return numbers[index]!!
     }
 
+    override fun set(index: Int, value: Int) {
+        numbers[index] = value
+    }
+
     override fun removeAt(index: Int) {
         for(i in index until size - 1){
             numbers[i] = numbers[i + 1]
@@ -61,7 +73,7 @@ class NumbersArrayList : NumbersMutableList {
     }
 
     override fun clear() {
-        numbers = arrayOfNulls(10)
+        numbers = arrayOfNulls(INITIAL_CAPACITY)
         size = 0
     }
 
@@ -70,5 +82,12 @@ class NumbersArrayList : NumbersMutableList {
             if(numbers[i] == number) return true
         }
         return false
+    }
+
+    companion object{
+        private const val INITIAL_CAPACITY = 10 //понятно за что отвечает число 10
+//        const val отличается от val тем, что для него не создается getter под капотом, и тем более нельзя его переопределить
+//                в декпомпиляторе видно что везде где используется const val подставляется его значение сразу (10)
+//        как в inline func, а не ссылка на переменную, поэтому значение должно быть известно сразу, и оно должно быть примитивным типом
     }
 }

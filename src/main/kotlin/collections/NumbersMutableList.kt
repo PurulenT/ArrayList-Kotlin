@@ -8,9 +8,14 @@ interface NumbersMutableList {
 
     fun add(index: Int, number: Int)
 
-    fun get(index: Int): Int
+    operator fun plus(number: Int)
+
+    operator fun get(index: Int): Int //добавление operator позволяет в реализации обращаться к индексам через []
+    operator fun set(index: Int, value: Int)
 
     fun removeAt(index: Int)
+
+    operator fun minus(number: Int)
 
     fun remove(number: Int)
 
