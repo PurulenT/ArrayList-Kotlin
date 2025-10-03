@@ -13,19 +13,28 @@ class NumbersArrayList : NumbersMutableList {
     }
 
     fun growIfNeeded() {
-        if (numbers.size == size) {
+        if(numbers.size == size){
             val newArray = arrayOfNulls<Int>(numbers.size * 2)
-            for (index in numbers.indices) {
+            for(index in numbers.indices){
                 newArray[index] = numbers[index]
             }
             numbers = newArray
         }
     }
 
+//    override fun add(index: Int, number: Int) { Неправильная реализация, но по какой то причине проходит тесты
+//        growIfNeeded()
+//        for(i in size+1 downTo index + 1){
+//            numbers[i] = numbers[i + 1]
+//        }
+//        numbers[index] = number
+//        size++
+//    }
+
     override fun add(index: Int, number: Int) {
         growIfNeeded()
         for(i in size downTo index + 1){
-            numbers[size] = numbers[i - 1]
+            numbers[i] = numbers[i - 1] //исправлена ошибка: индекс не size а i
         }
         numbers[index] = number
         size++
@@ -36,7 +45,7 @@ class NumbersArrayList : NumbersMutableList {
     }
 
     override fun removeAt(index: Int) {
-        for (i in index until size - 1) {
+        for(i in index until size - 1){
             numbers[i] = numbers[i + 1]
         }
         size--
@@ -44,10 +53,9 @@ class NumbersArrayList : NumbersMutableList {
     }
 
     override fun remove(number: Int) {
-        for (index in numbers.indices) {
-            if (numbers[index] == number) {
-                removeAt(index)
-                return
+        for(i in numbers.indices){
+            if(numbers[i] == number){
+                removeAt(i)
             }
         }
     }
@@ -58,8 +66,8 @@ class NumbersArrayList : NumbersMutableList {
     }
 
     override fun contains(number: Int): Boolean {
-        for (index in numbers.indices){
-            if(numbers[index] == number) return true
+        for(i in numbers.indices){
+            if(numbers[i] == number) return true
         }
         return false
     }
