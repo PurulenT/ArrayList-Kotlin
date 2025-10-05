@@ -25,7 +25,7 @@ class NumbersMutableListTest {
         assertEquals(1000, list.get(0))
     }
 
-    @ParameterizedTest
+    @ParameterizedTest //Раньше тест не проходил у линкед лист из за проблемного кода в гет нод
     @MethodSource("mutableListSource")
     fun `When added at last then it is last`(list: NumbersMutableList){
         repeat(100) {
@@ -82,7 +82,7 @@ class NumbersMutableListTest {
         assertEquals(99, list.size)
     }
 
-    @ParameterizedTest
+    @ParameterizedTest //Раньше тест не проходил у линкед лист из за проблемного кода в гет нод
     @MethodSource("mutableListSource")
     fun `When remove element then index is next`(list: NumbersMutableList) {
         repeat(100){
@@ -210,6 +210,6 @@ class NumbersMutableListTest {
 
     companion object{
         @JvmStatic
-        fun mutableListSource() = listOf(NumbersArrayList())
+        fun mutableListSource() = listOf(/*NumbersArrayList()*/ NumbersLinkedList())
     }
 }
