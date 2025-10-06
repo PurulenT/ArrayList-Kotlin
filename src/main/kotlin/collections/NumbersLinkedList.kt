@@ -6,6 +6,7 @@ class NumbersLinkedList : NumbersMutableList {
     private var last: Node? = null
 
     class Node(
+        var prev: Node? = null,
         val item: Int,
         var next: Node? = null
     )
@@ -14,17 +15,25 @@ class NumbersLinkedList : NumbersMutableList {
         private set
 
     override fun add(number: Int) {
-        if (size == 0) {
-            val node = Node(number)
-            first = node
-            last = node
-            size++
-            return
+        val prevLast = last
+        last = Node(prevLast, number)
+        if(prevLast == null){
+            first = last
+        } else {
+            prevLast.next = last
         }
-        val node = Node(number)
-        last?.next = node
-        last = node
         size++
+//        if (size == 0) { этот код теперь не нужен
+//            val node = Node(number)
+//            first = node
+//            last = node
+//            size++
+//            return
+//        }
+//        val node = Node(number)
+//        last?.next = node
+//        last = node
+//        size++
     }
 
     override fun add(index: Int, number: Int) {
@@ -34,7 +43,8 @@ class NumbersLinkedList : NumbersMutableList {
             return
         }
         if (index == 0) {
-            val node = Node(number, first)
+            val node = Node(null, number, first)
+            first?.prev = node
             first = node
             size++
             return
@@ -42,8 +52,9 @@ class NumbersLinkedList : NumbersMutableList {
         val before = getNode(index - 1)
 //        val after = getNode(index + 1) лучше вызвать before.next так как второй вызов getNode() заставляет программу прогонять второй цикл
         val after = before.next
-        val node = Node(number, after)
+        val node = Node(before, number, after)
         before.next = node
+        after?.prev = node
         size++
     }
 
@@ -64,12 +75,24 @@ class NumbersLinkedList : NumbersMutableList {
             return last!!
         }
 
-        var node = first
-        repeat(index) {
-            //first = first?.next так лучше не писать, тесты не проходили
-            node = node?.next
+        if(index < size/2) {
+            var node = first
+            repeat(index) {
+                //first = first?.next так лучше не писать, тесты не проходили
+                node = node?.next
+            }
+            return node!!
         }
-        return node!!
+        else{
+            var node = last
+            repeat(size - index - 1) {
+                //first = first?.next так лучше не писать, тесты не проходили
+                node = node?.prev
+            }
+            return node!!
+        }
+
+
     }
 
     override fun set(index: Int, value: Int) {
@@ -77,24 +100,40 @@ class NumbersLinkedList : NumbersMutableList {
         add(value, index)
     }
 
-    override fun removeAt(index: Int) {
-        checkIndex(index)
-        if(index == 0 && size == 1) {
-            clear()
-            return
-        }
-        if(index == 0) {
-            first = first?.next
-            size--
-            return
-        }
-        val before = getNode(index - 1)
-        val after = before.next?.next
-        before.next = after
-        if(after == null) {
+    private fun unlink(node: Node){
+        val before = node.prev
+        val after = node.next
+        before?.next = after
+        after?.prev = before
+        if (after == null) {
             last = before
         }
+        if (before == null) {
+            first = after
+        }
         size--
+    }
+
+    override fun removeAt(index: Int) {
+        checkIndex(index)
+        val node = getNode(index)
+        unlink(node)
+//        if(index == 0 && size == 1) { с введением предыдущего элемента код сильно упрощается при помощи метода unlink
+//            clear()
+//            return
+//        }
+//        if(index == 0) {
+//            first = first?.next
+//            size--
+//            return
+//        }
+//        val before = getNode(index - 1)
+//        val after = before.next?.next
+//        before.next = after
+//        if(after == null) {
+//            last = before
+//        }
+//        size--
     }
 
     override fun minus(number: Int) {
@@ -102,24 +141,18 @@ class NumbersLinkedList : NumbersMutableList {
     }
 
     override fun remove(number: Int) {
-        if (first?.item == number) {
-            removeAt(0)
-            return
-        }
-        var before = first
+//        if (first?.item == number) { код сильно упрощается
+//            removeAt(0)
+//            return
+//        }
+        var node = first
         repeat(size){
-            val node = before?.next
             if(node?.item == number) {
-                val after = node.next
-                before?.next =  after
-                if (after == null) {
-                    last = before
-                }
-                size--
+               node?.let { unlink(it) }
                 return
             }
             else{
-                before = before?.next
+                node = node?.next
             }
         }
     }
