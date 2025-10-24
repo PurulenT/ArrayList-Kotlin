@@ -1,5 +1,7 @@
 package collections
 
+import kotlin.random.Random
+
 fun main() {
 //    val numbers = mutableListOf<Int>()
 //    while(true){
@@ -15,7 +17,7 @@ fun main() {
 
     val numbers = NumbersHashSet()
     repeat(100){
-        numbers.add(it)
+        numbers.add(Random.nextInt(0, 1000))
     }
 
     numbers.elements.forEach(::println)

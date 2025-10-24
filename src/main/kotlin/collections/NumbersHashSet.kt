@@ -4,20 +4,20 @@ import java.lang.Math.abs
 
 class NumbersHashSet : NumbersMutableSet {
 
-    var elements = arrayOfNulls<Node>(INITIAL_CAPACITY)
+    var elements = arrayOfNulls<Node?>(INITIAL_CAPACITY)
+
     override var size: Int = 0
         private set
 
     override fun add(number: Int): Boolean {
-        if(size > elements.size * LOAD_FACTOR){
+        if (size > elements.size * LOAD_FACTOR) {
             increaseArray()
         }
-        return add(number, elements).also { added->
-            if(added) {
+        return add(number, elements).also { added ->
+            if (added) {
                 size++
             }
         }
-
     }
 
     fun add(number: Int, array: Array<Node?>): Boolean {
@@ -27,34 +27,20 @@ class NumbersHashSet : NumbersMutableSet {
         if (existedElement == null) {
             array[position] = newElement
             return true
-        }
-        else {
+        } else {
             while (true) {
-                if (existedElement?.item == number) { // в коллекциях Set не бывает дубликатов
+                if (existedElement?.item == number) {
                     return false
                 } else {
                     if (existedElement?.next == null) {
                         existedElement?.next = newElement
                         return true
-                    }
-                    else {
+                    } else {
                         existedElement = existedElement.next
                     }
                 }
             }
         }
-    }
-
-    private fun increaseArray() {
-        val newArray = arrayOfNulls<Node?>(elements.size * 2)
-        for(node in elements) {
-            var currentElement = node
-            if(currentElement != null){
-                add(currentElement.item, newArray)
-                currentElement = currentElement.next
-            }
-        }
-        elements = newArray
     }
 
     override fun set(index: Int, value: Int) {
@@ -73,8 +59,21 @@ class NumbersHashSet : NumbersMutableSet {
         TODO("Not yet implemented")
     }
 
-    private fun getElementPosition(number: Int, size: Int): Int{ //для коллекций set сначала нужно определить позицию для элемента
+    private fun getElementPosition(number: Int, size: Int): Int {
         return abs(number % size)
+    }
+
+
+    private fun increaseArray() {
+        val newArray = arrayOfNulls<Node?>(elements.size * 2)
+        for (node in elements) {
+            var currentElement = node
+            while (currentElement != null) { //ошибка в первом коммите: здесь должен быть цикл как здесь
+                add(currentElement.item, newArray)
+                currentElement = currentElement.next
+            }
+        }
+        elements = newArray
     }
 
     data class Node(
@@ -82,7 +81,7 @@ class NumbersHashSet : NumbersMutableSet {
         var next: Node? = null
     )
 
-    companion object{
+    companion object {
         private const val INITIAL_CAPACITY = 16
         private const val LOAD_FACTOR = 0.75
     }
