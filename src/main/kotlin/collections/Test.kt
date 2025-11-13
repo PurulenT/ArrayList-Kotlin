@@ -16,10 +16,15 @@ fun main() {
 //    numbers.forEach(::println)
 
     val numbers = NumbersHashSet()
-    repeat(100){
-        numbers.add(Random.nextInt(0, 1000))
+    for (i in 1..10) {
+        numbers.add(i)
     }
 
-    numbers.elements.forEach(::println)
+    numbers.add(100)
 
+
+    numbers.elements.forEach(::println) //
+    println("removing 100 number")
+    numbers.remove(100)
+    numbers.elements.forEach(::println)
 }
