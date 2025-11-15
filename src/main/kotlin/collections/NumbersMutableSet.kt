@@ -1,16 +1,16 @@
 package collections
 
-interface NumbersMutableSet {
+interface NumbersMutableSet<T> {
 
     val size: Int
 
-    fun add(number: Int): Boolean
+    fun add(element: T): Boolean
 
-    operator fun set(index: Int, value: Int)
+    operator fun set(index: Int, value: T)
 
-    fun remove(number: Int)
+    fun remove(element: T)
 
     fun clear()
 
-    fun contains(number: Int): Boolean
+    fun contains(element: T): Boolean
 }
