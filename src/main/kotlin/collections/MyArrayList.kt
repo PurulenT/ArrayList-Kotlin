@@ -1,28 +1,28 @@
 package collections
 
-class NumbersArrayList : NumbersMutableList {
-    private var numbers = arrayOfNulls<Int>(INITIAL_CAPACITY)
+class MyArrayList<T> : MyMutableList<T> {
+    var numbers = arrayOfNulls<Any>(INITIAL_CAPACITY)
 
     override var size: Int = 0
         private set
 
-    override fun add(number: Int) {
+    override fun add(element: T) {
         growIfNeeded()
-        numbers[size] = number
+        numbers[size] = element
         size++
     }
 
-    override fun plus(number: Int) {
-        add(number)
+    override fun plus(element: T) {
+        add(element)
     }
 
-    override fun minus(number: Int) {
-        remove(number)
+    override fun minus(element: T) {
+        remove(element)
     }
 
     fun growIfNeeded() {
         if(numbers.size == size){
-            val newArray = arrayOfNulls<Int>(numbers.size * 2)
+            val newArray = arrayOfNulls<Any>(numbers.size * 2)
             System.arraycopy(numbers, 0, newArray, 0, size)
 //            for(index in numbers.indices){ цикл на языке kotlin/java гораздо медленнее метода arraycopy (низкоуровневый С,С++)
 //                newArray[index] = numbers[index]
@@ -40,23 +40,23 @@ class NumbersArrayList : NumbersMutableList {
 //        size++
 //    }
 
-    override fun add(index: Int, number: Int) {
+    override fun add(index: Int, element: T) {
         checkIndexForAdding(index)
         growIfNeeded()
         System.arraycopy(numbers, index, numbers, index + 1, size - index)
 //        for(i in size downTo index + 1){ copyarray делает то же самое но быстрее так как написан на низкоуровневом языке С,С++
 //            numbers[i] = numbers[i - 1] //исправлена ошибка: индекс не size а i
 //        }
-        numbers[index] = number
+        numbers[index] = element
         size++
     }
 
-    override fun get(index: Int): Int {
+    override fun get(index: Int): T {
         checkIndex(index)
-        return numbers[index]!!
+        return numbers[index] as T
     }
 
-    override fun set(index: Int, value: Int) {
+    override fun set(index: Int, value: T) {
         checkIndex(index)
         numbers[index] = value
     }
@@ -71,9 +71,9 @@ class NumbersArrayList : NumbersMutableList {
         numbers[size] = null
     }
 
-    override fun remove(number: Int) {
+    override fun remove(element: T) {
         for(i in numbers.indices){
-            if(numbers[i] == number){
+            if(numbers[i] == element){
                 removeAt(i)
             }
         }
@@ -84,9 +84,9 @@ class NumbersArrayList : NumbersMutableList {
         size = 0
     }
 
-    override fun contains(number: Int): Boolean {
+    override fun contains(element: T): Boolean {
         for(i in numbers.indices){
-            if(numbers[i] == number) return true
+            if(numbers[i] == element) return true
         }
         return false
     }

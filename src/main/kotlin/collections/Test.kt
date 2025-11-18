@@ -1,7 +1,5 @@
 package collections
 
-import kotlin.random.Random
-
 fun main() {
 //    val numbers = mutableListOf<Int>()
 //    while(true){
@@ -15,16 +13,32 @@ fun main() {
 //    }
 //    numbers.forEach(::println)
 
-    val numbers = NumbersHashSet<Int>()
-    for (i in 1..10) {
-        numbers.add(i)
+
+
+    //хэш сет
+//    val numbers = MyHashSet<Int>()
+//    for (i in 1..10) {
+//        numbers.add(i)
+//    }
+//
+//    numbers.add(100)
+//
+//
+//    numbers.elements.forEach(::println) //
+//    println("removing 100 number")
+//    numbers.remove(100)
+//    numbers.elements.forEach(::println)
+
+    //arrayList
+    val numbers = MyArrayList<String>()
+    while(true){
+        val element = readln().toString()
+        if (element != "done"){
+            numbers.add(element)
+        }
+        else break
     }
+    println(numbers)
+    numbers.numbers.forEach(::println)
 
-    numbers.add(100)
-
-
-    numbers.elements.forEach(::println) //
-    println("removing 100 number")
-    numbers.remove(100)
-    numbers.elements.forEach(::println)
 }

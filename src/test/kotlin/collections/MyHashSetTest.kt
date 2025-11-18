@@ -3,8 +3,8 @@ package collections
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
-class NumbersHashSetTest {
-    private val numbers = NumbersHashSet()
+class MyHashSetTest {
+    private val numbers = MyHashSet<Int>()
 
     @Test
     fun `When added 100 then size 100`() {
