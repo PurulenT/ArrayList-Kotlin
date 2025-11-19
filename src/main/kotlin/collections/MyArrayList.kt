@@ -6,10 +6,11 @@ class MyArrayList<T> : MyMutableList<T> {
     override var size: Int = 0
         private set
 
-    override fun add(element: T) {
+    override fun add(element: T): Boolean {
         growIfNeeded()
         numbers[size] = element
         size++
+        return true
     }
 
     override fun plus(element: T) {
@@ -53,7 +54,7 @@ class MyArrayList<T> : MyMutableList<T> {
 
     override fun get(index: Int): T {
         checkIndex(index)
-        return numbers[index] as T
+        return numbers[index] as T  //ide жалуется на отсутствие проверки является ли объект типом Т, однако в массив при добалвении нового объекта не мохет попасть объ другого типа.
     }
 
     override fun set(index: Int, value: T) {
@@ -82,6 +83,20 @@ class MyArrayList<T> : MyMutableList<T> {
     override fun clear() {
         numbers = arrayOfNulls(INITIAL_CAPACITY)
         size = 0
+    }
+
+    override fun iterator(): Iterator<T> {
+        return object : Iterator<T>{
+            private var nextIndex = 0
+            override fun hasNext(): Boolean {
+                return nextIndex < size
+            }
+
+            override fun next(): T {
+                return numbers[nextIndex++] as T
+            }
+
+        }
     }
 
     override fun contains(element: T): Boolean {

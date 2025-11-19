@@ -14,7 +14,7 @@ class MyLinkedList<T> : MyMutableList<T> {
     override var size: Int = 0
         private set
 
-    override fun add(element: T) {
+    override fun add(element: T): Boolean {
         val prevLast = last
         last = Node(prevLast, element)
         if(prevLast == null){
@@ -23,6 +23,7 @@ class MyLinkedList<T> : MyMutableList<T> {
             prevLast.next = last
         }
         size++
+        return true
 //        if (size == 0) { этот код теперь не нужен
 //            val node = Node(number)
 //            first = node
@@ -161,6 +162,24 @@ class MyLinkedList<T> : MyMutableList<T> {
         first = null
         last = null
         size = 0
+    }
+
+    override fun iterator(): Iterator<T> {
+        return object: Iterator<T>{
+            private var nextElement = first
+            override fun hasNext(): Boolean {
+                return nextElement != null //Если равен налл значит дальше объектов нет, если не равен значит дальше объекты есть
+            }
+
+            override fun next(): T {
+//                val returnElement = nextElement
+//                nextElement = nextElement?.next
+//                return returnElement as T
+                return nextElement?.item!!.also {
+                    nextElement = nextElement?.next
+                }
+            }
+        }
     }
 
     override fun contains(element: T): Boolean {

@@ -79,6 +79,27 @@ class MyHashSet<T> : MyMutableSet<T> {
         size = 0
     }
 
+    override fun iterator(): Iterator<T> {  //Если я не помню как реализовать этот паттерн для хэш сэт - нарисовать схемку хэш таблицы с пустой ячейкой, с ячейкой с одним узлом, с ячейкой с массивом узлов. Посчитать нужно все непустые ячейки
+        return object : Iterator<T>{
+            private var nodeIndex = 0
+            private var nextNode: Node<T>? = elements[nodeIndex]
+            private var nextIndex = 0
+            override fun hasNext(): Boolean {
+                return nextIndex < size
+            }
+
+            override fun next(): T {
+                while(nextNode == null){
+                    nextNode = elements[++nodeIndex]
+                }
+                return nextNode?.item!!.also{
+                    nextIndex++
+                    nextNode = nextNode?.next
+                }
+            }
+        }
+    }
+
     override fun contains(element: T): Boolean {
         return contains(element, elements)
     }

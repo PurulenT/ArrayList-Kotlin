@@ -22,23 +22,59 @@ fun main() {
 //    }
 //
 //    numbers.add(100)
-//
-//
+
+//    for(n in numbers){ //тестирование паттерна итератор при помощи перебора
+//        println(n)
+//    }
+
+//    val iterator = numbers.iterator()  //тестирование паттерна итератор при помощи интерфейса итератор
+//    while(iterator.hasNext()){
+//        val next = iterator.next()
+//        println(next)
+//    }
+
+
 //    numbers.elements.forEach(::println) //
 //    println("removing 100 number")
 //    numbers.remove(100)
 //    numbers.elements.forEach(::println)
 
     //arrayList
-    val numbers = MyArrayList<String>()
-    while(true){
-        val element = readln().toString()
-        if (element != "done"){
-            numbers.add(element)
-        }
-        else break
-    }
-    println(numbers)
-    numbers.numbers.forEach(::println)
+//    val numbers = MyArrayList<String>()
+//    while(true){
+//        val element = readln().toString()
+//        if (element != "done"){
+//            numbers.add(element)
+//        }
+//        else break
+//    }
 
+//    for(n in numbers){
+//        println(n)
+//    }
+//
+//    val iterator = numbers.iterator()
+//    while(iterator.hasNext()){
+//        val next = iterator.next()
+//        println(next)
+//    }
+
+//    println(numbers)
+//    numbers.numbers.forEach(::println)
+
+    //linked list
+    val numbers = MyLinkedList<Int>()
+    repeat(10){
+        numbers.add(1)
+    }
+
+//    for(n in numbers){
+//        println(n)
+//    }
+
+    val iterator = numbers.iterator()
+    while(iterator.hasNext()){
+        val next = iterator.next()
+        println(next)
+    }
 }
