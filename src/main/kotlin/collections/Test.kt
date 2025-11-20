@@ -2,6 +2,7 @@ package collections
 
 fun main() {
 //    val numbers = mutableListOf<Int>()
+//    val numbers = MyArrayList<Int>()
 //    while(true){
 //        val number = readln().toInt()
 //        if(number != 0) {
@@ -10,6 +11,11 @@ fun main() {
 //        else{
 //            break
 //        }
+//    }
+//
+//    for(n in numbers){
+//        println(n)
+//        numbers.add(10) //ошибка у коллекций - при переборе нельзя изменять содержимое коллекции
 //    }
 //    numbers.forEach(::println)
 
@@ -22,9 +28,10 @@ fun main() {
 //    }
 //
 //    numbers.add(100)
-
+//
 //    for(n in numbers){ //тестирование паттерна итератор при помощи перебора
 //        println(n)
+////        numbers.add(15)
 //    }
 
 //    val iterator = numbers.iterator()  //тестирование паттерна итератор при помощи интерфейса итератор
@@ -68,13 +75,14 @@ fun main() {
         numbers.add(1)
     }
 
-//    for(n in numbers){
-//        println(n)
-//    }
-
-    val iterator = numbers.iterator()
-    while(iterator.hasNext()){
-        val next = iterator.next()
-        println(next)
+    for(n in numbers){
+        println(n)
+//        numbers.add(15)
     }
+//
+//    val iterator = numbers.iterator()
+//    while(iterator.hasNext()){
+//        val next = iterator.next()
+//        println(next)
+//    }
 }

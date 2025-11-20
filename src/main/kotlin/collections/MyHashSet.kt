@@ -5,11 +5,13 @@ import java.lang.Math.abs
 class MyHashSet<T> : MyMutableSet<T> {
 
     var elements = arrayOfNulls<Node<T>?>(INITIAL_CAPACITY)
+    var modCounter = 0
 
     override var size: Int = 0
         private set
 
     override fun add(element: T): Boolean {
+        modCounter++
         if (size > elements.size * LOAD_FACTOR) {
             increaseArray()
         }
@@ -21,6 +23,7 @@ class MyHashSet<T> : MyMutableSet<T> {
     }
 
     fun add(element: T, array: Array<Node<T>?>): Boolean {
+        modCounter++
         val newElement = Node(element)
         val position = getElementPosition(element, array.size)
         var existedElement = array[position]
@@ -48,10 +51,12 @@ class MyHashSet<T> : MyMutableSet<T> {
     }
 
     override fun remove(element: T) {
+        modCounter++
         remove(element, elements)
     }
 
     fun remove(element: T, array: Array<Node<T>?>) {
+        modCounter++
         if (!contains(element)) return
         val position = getElementPosition(element, array.size)
         val existingElement = array[position]
@@ -75,12 +80,14 @@ class MyHashSet<T> : MyMutableSet<T> {
     }
 
     override fun clear() {
+        modCounter++
         elements = arrayOfNulls<Node<T>?>(INITIAL_CAPACITY)
         size = 0
     }
 
-    override fun iterator(): Iterator<T> {  //Если я не помню как реализовать этот паттерн для хэш сэт - нарисовать схемку хэш таблицы с пустой ячейкой, с ячейкой с одним узлом, с ячейкой с массивом узлов. Посчитать нужно все непустые ячейки
-        return object : Iterator<T>{
+    override fun iterator(): MutableIterator<T> {  //Если я не помню как реализовать этот паттерн для хэш сэт - нарисовать схемку хэш таблицы с пустой ячейкой, с ячейкой с одним узлом, с ячейкой с массивом узлов. Посчитать нужно все непустые ячейки
+        return object : MutableIterator<T>{
+            private val currentMod = modCounter
             private var nodeIndex = 0
             private var nextNode: Node<T>? = elements[nodeIndex]
             private var nextIndex = 0
@@ -89,13 +96,19 @@ class MyHashSet<T> : MyMutableSet<T> {
             }
 
             override fun next(): T {
+
                 while(nextNode == null){
                     nextNode = elements[++nodeIndex]
                 }
+                if(currentMod != modCounter) throw ConcurrentModificationException()
                 return nextNode?.item!!.also{
                     nextIndex++
                     nextNode = nextNode?.next
                 }
+            }
+
+            override fun remove() {
+                TODO("Not yet implemented")
             }
         }
     }
@@ -122,6 +135,7 @@ class MyHashSet<T> : MyMutableSet<T> {
 
 
     private fun increaseArray() {
+        modCounter++
         val newArray = arrayOfNulls<Node<T>>(elements.size * 2)
         for (node in elements) {
             var currentElement = node

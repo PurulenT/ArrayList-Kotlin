@@ -1,12 +1,16 @@
 package collections
 
+import sun.security.ec.point.ProjectivePoint.Mutable
+
 class MyArrayList<T> : MyMutableList<T> {
     var numbers = arrayOfNulls<Any>(INITIAL_CAPACITY)
+    var modCounter = 0
 
     override var size: Int = 0
         private set
 
     override fun add(element: T): Boolean {
+        modCounter++
         growIfNeeded()
         numbers[size] = element
         size++
@@ -42,6 +46,7 @@ class MyArrayList<T> : MyMutableList<T> {
 //    }
 
     override fun add(index: Int, element: T) {
+        modCounter++
         checkIndexForAdding(index)
         growIfNeeded()
         System.arraycopy(numbers, index, numbers, index + 1, size - index)
@@ -63,6 +68,7 @@ class MyArrayList<T> : MyMutableList<T> {
     }
 
     override fun removeAt(index: Int) {
+        modCounter++
         checkIndex(index)
         System.arraycopy(numbers, index + 1, numbers, index, size - index - 1) // берем все элементы справа от индекса удаляемого и ставим их на место удаляемого
 //        for(i in index until size - 1){
@@ -73,6 +79,7 @@ class MyArrayList<T> : MyMutableList<T> {
     }
 
     override fun remove(element: T) {
+        modCounter++
         for(i in numbers.indices){
             if(numbers[i] == element){
                 removeAt(i)
@@ -81,21 +88,27 @@ class MyArrayList<T> : MyMutableList<T> {
     }
 
     override fun clear() {
+        modCounter++
         numbers = arrayOfNulls(INITIAL_CAPACITY)
         size = 0
     }
 
-    override fun iterator(): Iterator<T> {
-        return object : Iterator<T>{
+    override fun iterator(): MutableIterator<T> {
+        return object : MutableIterator<T>{
+            private val currentMod = modCounter
             private var nextIndex = 0
             override fun hasNext(): Boolean {
                 return nextIndex < size
             }
 
             override fun next(): T {
+                if(currentMod != modCounter) throw ConcurrentModificationException()
                 return numbers[nextIndex++] as T
             }
 
+            override fun remove() {
+                TODO("Not yet implemented")
+            }
         }
     }
 
