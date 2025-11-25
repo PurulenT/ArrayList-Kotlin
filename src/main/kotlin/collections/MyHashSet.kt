@@ -22,7 +22,7 @@ class MyHashSet<T> : MyMutableSet<T> {
         }
     }
 
-    fun add(element: T, array: Array<Node<T>?>): Boolean {
+    private fun add(element: T, array: Array<Node<T>?>): Boolean {
         modCounter++
         val newElement = Node(element)
         val position = getElementPosition(element, array.size)

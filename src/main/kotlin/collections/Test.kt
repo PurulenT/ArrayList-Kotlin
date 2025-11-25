@@ -100,29 +100,45 @@ fun main() {
 //    }
 //}
 
-    val numbers = TreeSet<Item>(object : Comparator<Item> { //В данному случае используется кокмпаратор и реализовывать Компарабл к классе Item не обязательно.
-        override fun compare(o1: Item, o2: Item): Int {     // Компаратор - это функциональный интерфейс, реализация метода сравнения передается прямо в аргумент
-            return when {                                   // Можно использовать такой способ в случае если нет доступа к исходному коду класса Item
-                o1.value > o2.value -> 1
-                o1.value < o2.value -> -1
-                else -> 0
-            }
-        }
-    })
+//    val numbers = TreeSet<Item>(object : Comparator<Item> { //В данному случае используется кокмпаратор и реализовывать Компарабл к классе Item не обязательно.
+//        override fun compare(o1: Item, o2: Item): Int {     // Компаратор - это функциональный интерфейс, реализация метода сравнения передается прямо в аргумент
+//            return when {                                   // Можно использовать такой способ в случае если нет доступа к исходному коду класса Item
+//                o1.value > o2.value -> 1
+//                o1.value < o2.value -> -1
+//                else -> 0
+//            }
+//        }
+//    })
+//
+//    repeat(100) {
+//        numbers.add(Item(Random.nextInt(0, 100)))
+//    }
+//    for (n in numbers) { //все элементы по прежнему расположены в порядке возрастания
+//        println(n)
+//    }
+//
+//
+//    val numbersLambda = TreeSet<Item> { o1, o2 -> //функциональный интерфейс компаратор был заменен на лямбду
+//        when {
+//            o1.value > o2.value -> 1
+//            o1.value < o2.value -> -1
+//            else -> 0
+//        }
+//    }
 
-    repeat(100) {
-        numbers.add(Item(Random.nextInt(0, 100)))
+    //тестирование MyHashMap<>
+
+    val content = MyHashMap<Int, Int>()
+    repeat(10){
+        content.put(it, it)
     }
-    for (n in numbers) { //все элементы по прежнему расположены в порядке возрастания
-        println(n)
+
+    println("keys:")
+    for(key in content.keys){
+        println(key)
     }
-
-
-    val numbersLambda = TreeSet<Item> { o1, o2 -> //функциональный интерфейс компаратор был заменен на лямбду
-        when {
-            o1.value > o2.value -> 1
-            o1.value < o2.value -> -1
-            else -> 0
-        }
+    println("values:")
+    for(value in content.values){
+        println(value)
     }
 }
